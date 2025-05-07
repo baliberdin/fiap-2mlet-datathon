@@ -1,0 +1,8 @@
+.venv
+datasets
+node_modules
+__pycache__
+*.egg-info
+.tool-versions
+build
+dist

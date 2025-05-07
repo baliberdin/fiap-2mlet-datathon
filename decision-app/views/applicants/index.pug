@@ -1,0 +1,37 @@
+extends ../layout
+
+block content
+  .row.mt-4
+    h1 Candidatos
+    p Lista de candidatos cadastrados
+  .row.mt-4
+    .col
+      if applicants.length > 0
+        table.table.table-hover.table-sm
+          thead 
+            tr
+              th Nome
+              th E-mail
+              th Telefone
+              th Nível Profissional
+              //- th Área de Especialização
+              th Criado em
+              th Atualizado em
+              th Ações
+          for applicant in applicants
+            tr(onclick=`window.location='/applicants/${applicant.id}'` style='cursor: pointer;')
+              td= applicant.name
+              td= applicant.email
+              td= applicant.phone_number
+              td= applicant.professional_level
+              //- td= applicant.area_of_expertise
+              if(applicant.created_at)
+                td=applicant.created_at.toLocaleDateString()
+              else 
+                td=''
+              if(applicant.updated_at)
+                td=applicant.updated_at.toLocaleDateString()
+              else 
+                td=''
+              td
+                a.btn.btn-primary.btn-sm(href=`/applicants/${applicant.id}`) Ver Detalhes

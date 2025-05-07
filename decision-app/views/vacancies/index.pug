@@ -1,0 +1,32 @@
+extends ../layout
+
+block content
+  .row.mt-4
+    h1 Vagas
+    p Lista de todas as vagas disponíveis
+
+  .row.mt-4
+    .col
+      if vacancies.length > 0
+        table.table.table-hover.table-sm
+          thead 
+            tr
+              th Título
+              th Cliente
+              th Nível Profissional
+              th Motivo
+              th Data de Solicitação
+              th Candidatos
+              th Ações
+          for vacancy in vacancies
+            tr(onclick=`window.location='/vacancies/${vacancy.id}'` style='cursor: pointer;')
+              td= vacancy.title
+              td= vacancy.client
+              td= vacancy.professional_level
+              td= vacancy.reason
+              td= vacancy.requested_date.toLocaleDateString()
+              td= vacancy.applicants
+              td
+                a.btn.btn-primary.btn-sm(href=`/vacancies/${vacancy.id}`) Ver Detalhes
+
+        

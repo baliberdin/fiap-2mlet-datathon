@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "data_transform_utilities"
+version = "0.0.1"
+description = "Funções para trasformar dados (UDFs)"
+authors = [
+    { name = "Allan Baliberdin", email = "a.baliberdin@gmail.com" }
+]
+dependencies = [
+    "pandas",
+    "numpy"
+]
+requires-python = ">=3.8"
+readme = "README.md"
+
+#[tool.setuptools]
+#packages = ["src"]
+
+#[tool.setuptools.packages]
+#find = {}
+
+[tool.setuptools.packages.find]
+# All the following settings are optional:
+where = ["src"]  # ["."] by default
+include = ["data_transform_utilities"]  # ["*"] by default
+#exclude = ["tests*"]  # empty by default
+#namespaces = false  # true by default
+
+[project.optional-dependencies]
+dev = ["pytest"]

@@ -1,0 +1,16 @@
+pysolr==3.10.0
+huggingface-hub==0.30.2
+huggingface-hub[hf_xet]==0.30.2
+huggingface-hub[inference]==0.30.2
+pysolr==3.10.0
+pyspark==3.5.5
+ipykernel==6.29.5
+SQLAlchemy==2.0.39
+transformers==4.51.3
+torch==2.6.0
+scikit-learn==1.6.1
+pandas==2.2.3
+pandasql==0.7.3
+pytest==8.3.5
+PyMySQL==1.1.1
+datasets==3.5.1

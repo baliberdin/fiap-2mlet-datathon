@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Wed Apr 30 16:55:54 BRT 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0196-8845-216e-000005f73f40 
+on database directory /home/allan/Workspace/fiap-datathon-decision/data_engineering/metastore_db with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@5ffd2b27 
+Loaded from file:/home/allan/Workspace/fiap-datathon-decision/.venv/lib/python3.10/site-packages/pyspark/jars/derby-10.14.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=17+35-2724
+user.dir=/home/allan/Workspace/fiap-datathon-decision/data_engineering
+os.name=Linux
+os.arch=amd64
+os.version=6.14.4-300.fc42.x86_64
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
