@@ -14,3 +14,4 @@ pandasql==0.7.3
 pytest==8.3.5
 PyMySQL==1.1.1
 datasets==3.5.1
+faiss-cpu==1.11.0

@@ -2,7 +2,7 @@ const pool = require('../db/connection').pool;
 const GenericDB = require('./generic_db');
 
 class VacancyService extends GenericDB {
-    listVacanciesWithApplicantsCount = function() {
+    listVacanciesWithApplicantsCount = function(pagination) {
         return new Promise((resolve, reject) => {
             pool.query(`
                 SELECT 
@@ -14,13 +14,20 @@ class VacancyService extends GenericDB {
                         FROM vacancies_applicants GROUP BY 1) as va
                     ON va.vacancy_id = v.id
                 ORDER BY v.id desc
-                LIMIT ${this.defaultLimit}
-            `, (error, results) => {
+                LIMIT ?,?
+            `, [pagination.getOffset(), pagination.pageSize], (error, results) => {
                 if (error) {
                     console.error('Error fetching vacancies:', error);
-                    return reject(error);
+                    reject(error);
                 }
-                resolve(results);
+
+                pool.query('SELECT COUNT(1) AS total FROM vacancies', (error, countResults) =>{
+                    if(error) {
+                        console.error('Error fetching vacancies:', error);
+                        reject(error);
+                    }
+                    resolve({results: results, totalItems: countResults[0].total});
+                })
             });
         });
     }
