@@ -14,4 +14,7 @@ pandasql==0.7.3
 pytest==8.3.5
 PyMySQL==1.1.1
 datasets==3.5.1
-faiss-cpu==1.11.0
+build==1.2.2
+sentence_transformers==4.1.0
+accelerate==1.6.0
+qdrant_client==1.14.2

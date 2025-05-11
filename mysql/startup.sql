@@ -12,6 +12,7 @@ CREATE TABLE `decision`.`vacancies` (
   `requested_date` date DEFAULT NULL,
   `expected_hiring_date` date DEFAULT NULL,
   `title` longtext,
+  `normalized_title` longtext,
   `sap_job` bit(1) DEFAULT NULL,
   `client` longtext,
   `client_requester` longtext,
