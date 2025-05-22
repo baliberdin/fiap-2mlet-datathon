@@ -67,6 +67,7 @@ run-model-train:
 	@jupyter nbconvert --to notebook --execute model/scripts/model_train.ipynb --output=_model_train.ipynb
 	
 restore-database:
+	@mkdir -p datasets/parquet
 	@jupyter nbconvert --to notebook --execute data_engineering/preprocessing_data.ipynb --output=_preprocessing_data.ipynb
 
 restore-vector-database:

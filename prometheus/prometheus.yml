@@ -36,3 +36,7 @@ scrape_configs:
   - job_name: similarity-api
     static_configs:
       - targets: ["similarity-api:80"]
+
+  - job_name: qdrant
+    static_configs:
+      - targets: ["qdrant:6333"]
