@@ -35,6 +35,8 @@ O ecossistema criado nesse projeto é feito a partir de um Docker compose que in
 - **mysql** - Banco de dados relacional para a aplicação
 - **pypiserver** - Servidor de libs python para publicar as nossas libs
 
+![alt](./docs/images/diagram.png)
+
 # Subindo o ambiente Local
 Para poder termos o ambiente local funcionando precisamos executar alguns passos, esses passos precisam
 ser executados em um shell (bash/sh) e que tenha o make instalado. Todas as tarefas desse projeto estão descritas no Makefile e são elas que vamos utilizar para passar por todos os passos do desenvolvimento.
@@ -46,28 +48,27 @@ python -m venv .vemv
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
-
-Depois de criar um virtualenv com as libs necessárias o restante dos processos estão automatizados utilizando Make.
+### Construindo e instalando as bibliotecas
 
 ```sh
 # Constroi e instala as bibliotecas desenvolvidas nesse projeto
 make build-python-libraries
 make install-libraries
 ```
-
+### Executando os testes automatizados (Opcional)
 ```sh
 # (Opcional)
 # Roda os testes das bibliotecas e da API
 make run-libraries-test
 make run-api-test
 ```
-## Subindo os Containers
+### Subindo os Containers
 Antes de iniciarmos os containers precisamos criar as imagens docker das aplicações:
 ```sh
 # Cria as imagens docker do App e da API
 make build-images
 ```
-#### MySQL
+### MySQL
 Vamos iniciar primeiro o MySQL para receber o import dos dados que a FIAP nos entregou.
 ```sh
 # Inicia o MySQL. O acesso é feito com as credenciais padrões: user: decision / pass: 1234
@@ -86,21 +87,55 @@ make restore-database
 ```
 Ao fim dessa task execute novamente o client mysql para verificar se os dados estão no banco decision.
 
-#### Decision App
+### Decision App
 ```sh
 # Este comando irá iniciar o container da aplicação frontend da Decision
 make start-decision-app
 ```
 Para verificar se está tudo certo acesse o app em http://localhost:3001/vacancies e então uma lista de vagas deverá ser exibida
 
-#### Monitoramento
+### Similarity API
+A API de similaridade precisa de um modelo treinado e disponível no MLflow Server antes de ser iniciada, portanto, vá até a sessão de [Treinando o Modelo](#treinando-o-modelo) e quando um modelo estiver treinado volte aqui para iniciar a API
+
+Se você já tem um modelo treinado então agora é necessário configurar o arquivo de configuração da API. Edite o arquivo **env.yaml** que está na pstas **similarity_api** colocando a versão do modelo que você treinou.
+
+```sh
+make start-similarity-api
+```
+
+### Monitoramento
 A API de similaridade é monitorada utilizando Prometheus e Grafana. Para iniciar esses containers rode o comando:
 ```sh
 make start-monitoring
 ```
 Acesse http://localhost:3000/dashboards para acessar o Grafana. (user: admin / pass: admin) e entre no dashboard **Similarity API**
 
+# Treinando o Modelo
+O processo de treino do modelo é bem custoso, recomendo a utilização de uma GPU, se for utilizar uma GPU AMD é necessário instalar o ROCm
+```sh
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.3
+```
+```sh
+# Executa o treino do modelo. Notebook: model/scripts/model_train.ipynb
+make run-model-train
+```
 
+# Avaliação do Modelo
+O método escolhido para avaliar o modelo após o treino, além das métricas extraídas durante o treino, como (Pearson Cosine e Spearman Cosine), foi o NDCG.
+O processo de avaliação utilizando o NDCG depende de uma base de dados com scores para ser comparada com os scores gerados pelo modelo. Para o caso aqui em questão estamos gerando essa base a partir do histórico de candidatos que passaram por processo seletivo e o status que eles possuem nesse processo, quanto mais próximo de ser contratado o score é maior e quanto mais próximo da recusa do cliente, ou falta de interesse na vaga, o score é menor.
+Tanto o dataset de teste quanto o processo de cálculo do NDCG são executados no notebook (**model/scripts/ndcg_evaluation.ipynb**) e o resultado é registrado no banco de dados MySQL para ser exibido no painel de monitoramento do Grafana.
+
+Execução do teste
+```sh
+make run-ndcg-evaluation
+```
+
+# Indexação dos dados históricos no Qdrant
+Quando todos os sistemas estiverem funcionando você ainda não verá nenhuma recomendação de similaridade no App da Decision porque a base de dados vetorial ainda está vazia. Para popular essa base com os dados históricos você precisa executar a seguinte task
+```sh
+make restore-vector-database
+```
+**ATENÇÃO:** Este comando executa o notebook **data_engineering/vectors_indexing.ipynb** que utiliza uma versão do modelo deployado no MLFLow, por isso, antes de executar é importante verificar se a versão que o script vai utilizar existe no seu MLFlow Server.
 
 
  

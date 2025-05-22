@@ -28,6 +28,9 @@ start-decision-app:
 start-monitoring:
 	@docker compose up -d prometheus grafana
 
+start-similarity-api:
+	@docker compose up -d similarity-api
+
 run-mysql-client:
 	docker exec -it mysql mysql -u decision -p
 
@@ -59,3 +62,6 @@ run-model-train:
 	
 restore-database:
 	@jupyter nbconvert --to notebook --execute data_engineering/preprocessing_data.ipynb --output=_preprocessing_data.ipynb
+
+restore-vector-database:
+	@jupyter nbconvert --to notebook --execute data_engineering/vectors_indexing.ipynb --output=_vectors_indexing.ipynb
