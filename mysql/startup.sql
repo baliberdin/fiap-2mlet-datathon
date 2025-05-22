@@ -81,6 +81,7 @@ CREATE TABLE `decision`.`applicants` (
   `linkedin_url` blob,
   `facebook_url` blob,
   `professional_title` longtext,
+  `normalized_professional_title` longtext,
   `area_of_expertise` longtext,
   `technical_knowledge` longtext,
   `certifications` longtext,
@@ -120,6 +121,7 @@ CREATE TABLE `decision`.`vacancies_applicants` (
   `application_date` date DEFAULT NULL,
   `last_update` date DEFAULT NULL,
   `recruiter` longtext,
+  `score` decimal default 0.0,
   CONSTRAINT `unk_vacancy_applicant` UNIQUE (`vacancy_id`, `applicant_id`),
   FOREIGN KEY (`vacancy_id`) REFERENCES `decision`.`vacancies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (`applicant_id`) REFERENCES `decision`.`applicants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -141,23 +143,8 @@ CREATE TABLE `decision`.`applicants_tokens` (
   FOREIGN KEY (`applicant_id`) REFERENCES `decision`.`applicants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- CREATE TABLE `decision`.`price_history` (
---     `id` bigint auto_increment primary key,
---     `ticker` varchar(10) not null,
---     `reference_date` date not null default (current_date),
---     `close_price` double not null,
---     CONSTRAINT `unk_ticker_date` UNIQUE (`ticker`, `reference_date`),
---     INDEX `idx_price_dt` (`reference_date`)
--- );
-
--- CREATE TABLE `decision`.`prediction_price_history` (
---     `id` bigint auto_increment primary key,
---     `ticker` varchar(10) not null,
---     `reference_date` date not null default (current_date),
---     `predicted_price` double not null,
---     `model_version` varchar(255) not null,
---     CONSTRAINT `unk_ticker_date+prediction` UNIQUE (`ticker`, `reference_date`),
---     INDEX `idx_prediction_price_dt` (`reference_date`),
---     INDEX `idx_prediction_ticker` (`ticker`),
---     INDEX `idx_prediction_model_version` (`model_version`)
--- );
+CREATE TABLE `decision`.`ndcg_results` (
+  `id` bigint auto_increment primary key,
+  `created_at` timestamp default now(),
+  `score` decimal(10,8) not null
+);

@@ -2,8 +2,15 @@ extends ../layout
 
 block content
   .row.mt-4
-    h1 Vagas
-    p Lista de todas as vagas disponíveis
+    .col-md-4
+      h1 Vagas
+      p Lista de todas as vagas disponíveis
+      a.btn.btn-primary(href="/vacancies/new") Adicionar Vaga
+    .col-md-4
+      form.form
+        .input-group
+          input.form-control(placeholder="Busque por palavra chave" id="search-query" name="q" value=pagination.query)
+          button.btn.btn-primary("") Buscar
 
   .row.mt-4
     .col
@@ -35,27 +42,27 @@ block content
               li.page-item 
                 a.page-link.disabled(href="#") Anterior
               li.page-item 
-                a.page-link.disabled(href="/vacancies?pg=1") 1
+                a.page-link.disabled(href=`/vacancies?pg=1&q=${pagination.query}`) 1
               if(pagination.getTotalPages() > 1)
                 li.page-item
-                  a.page-link(href="/vacancies?pg=2") 2
+                  a.page-link(href=`/vacancies?pg=2&q=${pagination.query}`) 2
               if(pagination.getTotalPages() > 2)
                 li.page-item
-                  a.page-link(href="/vacancies?pg=3") 3
+                  a.page-link(href=`/vacancies?pg=3&q=${pagination.query}`) 3
             else 
               li.page-item 
-                a.page-link(href=`/vacancies?pg=${pagination.page-1}`) Anterior
+                a.page-link(href=`/vacancies?pg=${pagination.page-1}&q=${pagination.query}`) Anterior
               li.page-item 
-                a.page-link(href=`/vacancies?pg=${pagination.page -1}`)= pagination.page -1
+                a.page-link(href=`/vacancies?pg=${pagination.page -1}&q=${pagination.query}`)= pagination.page -1
               if(pagination.getTotalPages() > 1)
                 li.page-item
-                  a.page-link.disabled(href=`/vacancies?pg=${pagination.page}`)= pagination.page
+                  a.page-link.disabled(href=`/vacancies?pg=${pagination.page}&q=${pagination.query}`)= pagination.page
               if(pagination.page < pagination.getTotalPages())
                 li.page-item
-                  a.page-link(href=`/vacancies?pg=${pagination.page+1}`)= pagination.page+1
+                  a.page-link(href=`/vacancies?pg=${pagination.page+1}&q=${pagination.query}`)= pagination.page+1
             li.page-item 
               if(pagination.page < pagination.getTotalPages())
-                a.page-link(href=`/vacancies?pg=${pagination.page +1}`) Próxima
+                a.page-link(href=`/vacancies?pg=${pagination.page +1}&q=${pagination.query}`) Próxima
               else
                 a.page-link.disabled(href=`#`) Próxima
         

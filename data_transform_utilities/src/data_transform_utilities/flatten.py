@@ -12,6 +12,14 @@ def _flatten_dict(d, parent_key='', sep='_'):
     return dict(items)
 
 def flatten(df):
+    """
+    Função que extrai colunas aninhadas e cria novas colunas. Esse processo
+    mantêm o padrão de nome da coluna mãe como prefixo.
+    Args:
+        df: Dataframe - Dataframe pandas com colunas aninhadas
+    Returns:
+        Dataframe com as colunas aninhadas extraídas.
+    """
     flat_rows = []
     nested_columns = [col for col in df.columns if any(isinstance(row, dict) for row in df[col])]
     for _, row in df.iterrows():

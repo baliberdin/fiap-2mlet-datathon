@@ -2,7 +2,11 @@ import re
 import json
 
 def clean_str(str :str):
+    """Função que faz uma limpeza em campos de texto. Remove alguns padrões numéricos 
+    e caracteres especiais que não ajudam no processamento de texto
+    """
     new_str = str
+    if not str: return None
     str = str.lower().strip()
     
     while True:
@@ -15,17 +19,8 @@ def clean_str(str :str):
         
         # Remove números entre parênteses
         str = re.sub(r'\(\d+\)', '', str).strip()
-        #str = re.sub(r'\d+\/\d+', '', str).strip()
-        
-        # Remove codigos de vagas no final da string
-        #str = re.sub(r'-\s+[a-z]+\d+$', '', str).strip()
-        #str = re.sub(r'-\s+[a-z]+[\-_]\d+$', '', str).strip()
-        
-        #str = re.sub(r'\s?((\d+\/\d+)|(([a-z]{0,3})(_)?\d+(_\d+)?)|(\d+_\d+))$', '', str).strip()
         str = re.sub(r'\s((\d+\/\d+)|(([a-z]{0,3})([\-_])?\d+([\-_]\d+)?)|(\d+[\-_]\d+))$', '', str).strip()
-        
         str = re.sub(r'\s-([a-z]{0,3})-\d+_\d+$', '', str).strip()
-        
         
         # Remove numeros no final da string
         str = re.sub(r'\d+$', '', str).strip()
@@ -37,13 +32,9 @@ def clean_str(str :str):
         str = re.sub(r'^-\s+', '', str).strip()
         str = re.sub(r'\s+-(\s+)?$', '', str).strip()
         
-        #str = re.sub(r'\s+-([a-z])+-?$', '', str).strip()
-        
         #remove caracteres especiais
         str = re.sub(r'[^a-z0-9\s\-\/\.\&\–A-zÀ-ú]+', '', str).strip()
-        
         str = re.sub(r'\s-[a-z]+$', '', str).strip()
-        
         str = re.sub(r'\s+', ' ', str).strip()
         
         if str == new_str:

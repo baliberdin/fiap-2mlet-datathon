@@ -6,9 +6,9 @@ html
     link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous")
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    .container-fluid
-      header
-        nav.navbar.navbar-expand-lg.navbar-light.bg-light
+    header
+      nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+        .container-fluid
           a.navbar-brand(href='/') Decision App
           button.navbar-toggler(type='button', data-bs-toggle='collapse', data-bs-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
             span.navbar-toggler-icon
@@ -20,7 +20,8 @@ html
                 a.nav-link(href='/applicants') Candidatos
               li.nav-item
                 a.nav-link(href='/vacancies') Vagas
-      .main        
+    .main
+      .container-fluid        
         block content
 
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous")

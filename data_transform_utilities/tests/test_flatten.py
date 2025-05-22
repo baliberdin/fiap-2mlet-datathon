@@ -1,5 +1,5 @@
 import pandas as pd
-from data_transform_utilities.src import flatten
+from data_transform_utilities import flatten
 from io import StringIO
 
 def test_should_flatten_nested_dict_in_dataframe():

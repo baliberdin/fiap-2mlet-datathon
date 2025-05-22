@@ -2,10 +2,12 @@ class Pagination {
   page= 1;
   pageSize = 10;
   totalItems = 0;
+  query = undefined;
 
-  constructor(page, pageSize, totalItems){
+  constructor(page, pageSize, totalItems, query){
     this.page = (page * 1)?page *1: 1;
     this.pageSize = (pageSize *1)? pageSize*1: 10;
+    this.query = query?decodeURIComponent(query): undefined;
     this.setTotalItems(totalItems);
   }
 

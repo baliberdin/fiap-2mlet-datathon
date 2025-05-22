@@ -1,9 +1,9 @@
 extends ../layout
 
 block content
-  .row.mt-4
+  .row.pt-4.bg-panel
     h1= vacancy.title
-  .row.mt-4
+  .row.pt-4.bg-panel
     .col-md-4
       table
         tr 
@@ -15,18 +15,28 @@ block content
             b Data de Criação:
           td
             i.bi.bi-calendar-week.me-2
-            = vacancy.requested_date.toLocaleDateString("pt-BR")
+            = vacancy.requested_date?vacancy.requested_date.toLocaleDateString("pt-BR"): ""
         tr
           td.text-end 
             b Áreas de Expertise:
           td
-            for a in vacancy.areas_of_expertise.split(",")
-              span.badge.text-bg-primary.me-2= a
+            if vacancy.areas_of_expertise
+              for a in vacancy.areas_of_expertise.split(",")
+                span.badge.text-bg-primary.me-2= a
+        tr
+          td.text-end 
+            b Senioridade:
+          td
+            span.badge.text-bg-primary.me-2=vacancy.professional_level
         tr
           td.text-end 
             b PCD:
           td
-            span.badge.text-bg-warning.me-2= vacancy.only_pwd?'PCD':'Não PCD'
+            span.badge.text-bg-warning.me-2= vacancy.only_pwd?'Sim':'Não'
+        tr
+          td.text-end
+            b Localização:
+          td= `${vacancy.country}/${vacancy.state}/${vacancy.city}`
 
     .col-md-6
       h3 Descrição
@@ -36,7 +46,7 @@ block content
         = vacancy.behavioral_skills
       p
         span.badge.text-bg-primary.me-2 Principais Atividades: 
-        = vacancy.main_activities
+        = (vacancy.main_activities != vacancy.technical_and_behavioral_skills)?vacancy.main_activities:'' 
       p
         span.badge.text-bg-primary.me-2 Observações: 
         = vacancy.other_observations
@@ -44,14 +54,15 @@ block content
   .row.mt-4
     .col
       if applicants.length > 0
+        h3 Candidatos inscritos nessa Vaga
         table.table.table-hover.table-sm
           thead 
             tr
               th ID
               th Nome
               th E-mail
-              th Telefone
-              th Nível Profissional
+              //-th Telefone
+              th Cargo
               th Status
               th Comentário
               th Criado em
@@ -62,8 +73,8 @@ block content
               td= applicant.id
               td= applicant.name
               td= applicant.email
-              td= applicant.phone_number
-              td= applicant.professional_level
+              //-td= applicant.phone_number
+              td= applicant.professional_title
               td= applicant.status
               td= applicant.comment
               if(applicant.created_at)
@@ -79,7 +90,8 @@ block content
 
   .row.mt-4
     .col
-      if bestApplicants && bestApplicants.length > 0
+      if similarApplicants && similarApplicants.length > 0
+        h3 Candidatos por similaridade com a Vaga
         table.table.table-hover.table-sm
           thead 
             tr
@@ -87,7 +99,40 @@ block content
               th Nome
               th E-mail
               th Cargo
-              th Similar Tokens
+              //-th Similar Tokens
+              th Criado em
+              th Atualizado em
+              th Ações
+          for applicant in similarApplicants
+            tr
+              td= applicant.id
+              td= applicant.name
+              td= applicant.email
+              td= applicant.professional_title? applicant.professional_title.substring(0,50) : ''
+              //-td= applicant.similar_tokens
+              if(applicant.created_at)
+                td=applicant.created_at.toLocaleDateString()
+              else 
+                td=''
+              if(applicant.updated_at)
+                td=applicant.updated_at.toLocaleDateString()
+              else 
+                td=''
+              td
+                a.btn.btn-primary.btn-sm(href=`/applicants/${applicant.id}`) Ver Detalhes
+
+  .row.mt-4
+    .col
+      if bestApplicants && bestApplicants.length > 0
+        h3 Candidatos por similaridade via Tokens
+        table.table.table-hover.table-sm
+          thead 
+            tr
+              th ID
+              th Nome
+              th E-mail
+              th Cargo
+              //-th Similar Tokens
               th Criado em
               th Atualizado em
               th Ações
@@ -97,7 +142,7 @@ block content
               td= applicant.name
               td= applicant.email
               td= applicant.professional_title? applicant.professional_title.substring(0,50) : ''
-              td= applicant.similar_tokens
+              //-td= applicant.similar_tokens
               if(applicant.created_at)
                 td=applicant.created_at.toLocaleDateString()
               else 
