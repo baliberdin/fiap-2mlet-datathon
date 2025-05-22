@@ -14,4 +14,4 @@ def get_logger(logger_name):
         Logger (Logger): Uma instância de logger referente ao nome passado
         como parâmetro
     """
-    return logging.getLogger('stock_api')
+    return logging.getLogger('similarity_api')

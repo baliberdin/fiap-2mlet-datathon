@@ -13,6 +13,12 @@ build-images:
 	@docker build -t decision-app ./decision-app/
 	@docker build -t similarity-api ./similarity_api/
 
+build-decision-app-images:
+	@docker build -t decision-app ./decision-app/
+
+build-similarity-api-image:
+	@docker build -t similarity-api ./similarity_api/
+
 start-all:
 	@docker compose up -d
 

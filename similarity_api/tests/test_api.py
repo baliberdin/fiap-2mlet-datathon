@@ -2,12 +2,11 @@ from fastapi.testclient import TestClient
 from unittest.mock import patch
 from main import app
 from services.vectordb import get_similar_applicants
-from services.model import ModelService
 from api.resources import SimilarityDocumentResponse, CollectionPointer, Document
 from fastapi.exceptions import HTTPException
 
-client = TestClient(app)
 
+client = TestClient(app)
 
 def test_should_return_available_endpoints_on_root():
     # When
@@ -97,8 +96,18 @@ def test_should_return_error_when_call_to_vectordb_fail(mock_vacancy_service, mo
     
     
 @patch("services.vectordb.post_document")
-def test_should_embedding_document():
+@patch("main.model_service")
+def test_should_embedding_document(mock_vectordb_service, mock_model_service):
     # Given
+    doc = {"id":1, "title":"Dev Java", "description":"Conhecimento em Spring Boot", "location":"São Paulo, São Paulo"}
     
     # When
-    response = client.get("/similarity/applicants?vacancy_id=1")
+    response = client.post("/document/vacancies", json=doc)
+    
+    print(mock_vectordb_service)
+    print(mock_model_service)
+    
+    # Then
+    assert response.status_code == 201
+    assert mock_model_service.get_embedding(doc)
+    assert mock_vectordb_service.post_document(any, any)

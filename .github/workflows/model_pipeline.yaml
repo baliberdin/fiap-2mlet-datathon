@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  similarity-api-build:
 
     runs-on: ubuntu-latest
 
@@ -22,11 +22,11 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt --upgrade pip
 
+    - name: Install API dependencies
+      run: pip install -r similarity_api/requirements.txt --upgrade pip
+
     - name: Run tests
-      run: make run-libraries-test
+      run: make run-api-test
 
-    - name: Build libraries
-      run: make build-python-libraries
-
-    - name: Publish libraries
-      run: make publish-libraries
+    - name: Docker Image Build
+      run: make build-similarity-api-image

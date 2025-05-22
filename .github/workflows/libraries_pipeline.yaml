@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  python-libraries-build:
 
     runs-on: ubuntu-latest
 
@@ -28,5 +28,7 @@ jobs:
     - name: Build libraries
       run: make build-python-libraries
 
-    - name: Publish libraries
-      run: make publish-libraries
+    # Comentando esta etapa pois eu estou utilizando um repositório privado.
+    # Deixei aqui apenas para demonstrar como seria a publicação dos módulos.
+    #- name: Publish libraries
+    #  run: make publish-libraries
