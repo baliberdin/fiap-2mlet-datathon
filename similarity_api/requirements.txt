@@ -1,0 +1,10 @@
+fastapi==0.115.12
+fastapi-cli==0.0.7
+prometheus_fastapi_instrumentator==7.1.0
+mlflow==2.22.0
+pydantic_settings==2.9.1
+pydantic-settings-yaml==0.2.0
+sqlalchemy==2.0.37
+cryptography==44.0.1
+qdrant_client==1.14.2
+sentence_transformers==4.1.0

@@ -1,0 +1,32 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  similarity-api-build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt --upgrade pip
+
+    - name: Install API dependencies
+      run: pip install -r similarity_api/requirements.txt --upgrade pip
+
+    - name: Run tests
+      run: make run-api-test
+
+    - name: Docker Image Build
+      run: make build-similarity-api-image

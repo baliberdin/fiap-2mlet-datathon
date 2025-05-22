@@ -38,16 +38,19 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
 
-  # stock-predictions-api:
-  #   image: stock-predictions-api
-  #   container_name: stock-predictions-api
-  #   hostname: stock-predictions-api
-  #   depends_on: 
-  #     - mysql
-  #     - mlflow-server
-  #   restart: no
-  #   ports:
-  #     - 8000:80
+  similarity-api:
+    image: similarity-api
+    container_name: similarity-api
+    hostname: similarity-api
+    depends_on: 
+      - mysql
+      - mlflow-server
+    volumes:
+      - ./similarity_api/env.yaml:/opt/similarity-api/env.yaml
+      - ./similarity_api/logging.conf:/opt/similarity-api/logging.conf
+    restart: no
+    ports:
+      - 8000:80
 
   mlflow-server:
     image: ghcr.io/mlflow/mlflow:v2.20.1
@@ -59,29 +62,50 @@ services:
       - ./mlflow-server/bin/startup.sh:/opt/mlflow-server/startup.sh
     entrypoint: ["/opt/mlflow-server/startup.sh"]
 
-  # client-app:
-  #   image: client-app
-  #   container_name: client-app
-  #   hostname: client-app
-  #   depends_on: 
-  #     - stock-predictions-api
-  #   restart: always
-  #   ports:
-  #     - 3001:3001
-  #   environment:
-  #     - STOCK_API_HOST=stock-predictions-api
-  #     - STOCK_API_PORT=80
-
-  solr:
-    image: solr:latest
-    container_name: solr
-    hostname: solr
+  decision-app:
+    image: decision-app
+    container_name: decision-app
+    hostname: decision-app
+    depends_on: 
+      - mysql
+    restart: always
     ports:
-      - 8983:8983
+      - 3001:3001
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: decision
+      DB_PASSWORD: 1234
+      DB_NAME: decision
+      SIMILARITY_API_PORT: 80
+      SIMILARITY_API_HOST: similarity-api
+
+
+  qdrant:
+    image: qdrant/qdrant
+    container_name: qdrant
+    hostname: qdrant
+    ports:
+      - 6333:6333 
+
+  jenkins:
+    image: jenkins/jenkins
+    container_name: jenkins
+    hostname: jenkins
+    ports:
+      - 8080:8080
+      - 50000:50000
+
+  pypiserver:
+    image: pypiserver/pypiserver:latest
+    container_name: pypiserver
+    hostname: pypiserver
+    ports:
+      - 8081:8080
     volumes:
-      - ./solr/vacancies:/var/solr/data/vacancies
-      - ./solr/applicants:/var/solr/data/applicants
+      - ./pypiserver/packages:/data/packages
+    command: -a . -P .
 
 networks:
   development:
-    driver: bridg
+    driver: bridge

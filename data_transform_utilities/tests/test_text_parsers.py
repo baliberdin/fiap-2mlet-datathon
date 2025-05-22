@@ -1,5 +1,5 @@
 import pandas as pd
-from data_transform_utilities.src.text_parsers import clean_str, extract_json, json_str_to_array, normalize_and_tokenize_text
+from data_transform_utilities.text_parsers import clean_str, extract_json, json_str_to_array, normalize_and_tokenize_text
 from io import StringIO
 import json
 

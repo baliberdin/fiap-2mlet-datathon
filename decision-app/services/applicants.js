@@ -48,6 +48,40 @@ class ApplicantsService extends GenericDB {
             )
         });
     }
+
+    getApplicantsBySimilarityList = function(ids) {
+        return new Promise((resolve, reject) => {
+            let idMaps = {}
+            ids = !ids?[]:ids;
+            ids = ids.filter(i => i.score > 0.28);
+
+            if(ids.length == 0) {
+                resolve([]);
+            }else{
+                ids.forEach( i => {idMaps[i.id] = i.score});
+                pool.query(`
+                    select
+                        a.*
+                    from
+                        applicants a
+                    WHERE
+                        id IN(?)
+                    `,
+                    [ids.map( i => i.id)],
+                    (error, results) => {
+                        if (error) {
+                            console.error('Error fetching best applicants:', error);
+                            return reject(error);
+                        }
+
+                        let sortedResult = results.sort( (a,b) => idMaps[b.id] - idMaps[a.id] );
+                        //sortedResult.map( i=> console.log(`{${i.id} : ${idMaps[i.id]}}`));
+                        resolve(sortedResult);
+                    }
+                );
+            }
+        });
+    }
 }
 
 module.exports = new ApplicantsService('applicants');

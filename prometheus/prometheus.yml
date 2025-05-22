@@ -33,6 +33,6 @@ scrape_configs:
     static_configs:
       - targets: ["localhost:9323"]
 
-  - job_name: stock-predictions-api
+  - job_name: similarity-api
     static_configs:
-      - targets: ["stock-predictions-api:80"]
+      - targets: ["similarity-api:80"]

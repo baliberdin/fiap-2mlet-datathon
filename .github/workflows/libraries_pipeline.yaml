@@ -1,0 +1,34 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  python-libraries-build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt --upgrade pip
+
+    - name: Run tests
+      run: make run-libraries-test
+
+    - name: Build libraries
+      run: make build-python-libraries
+
+    # Comentando esta etapa pois eu estou utilizando um repositório privado.
+    # Deixei aqui apenas para demonstrar como seria a publicação dos módulos.
+    #- name: Publish libraries
+    #  run: make publish-libraries

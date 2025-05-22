@@ -5,18 +5,39 @@ block content
     h1= applicant.name
       small.text-body-secondary.ms-2= applicant.email
   .row.mt-4
-    .col-md-3
+    .col-md-4
       .h2= applicant.professional_title
-      p.badge.text-bg-secondary=applicant.area_of_expertise
-      p.badge.text-bg-secondary=applicant.phone_number
-      p 
-        | Criado em: 
-        i.bi.bi-calendar-week.me-2
-        =applicant.created_at?applicant.created_at.toLocaleDateString():''
-      p 
-        | Atualizado em: 
-        i.bi.bi-calendar-week.me-2
-        =applicant.updated_at?applicant.updated_at.toLocaleDateString():''
+
+      table
+        tr 
+          td.text-end
+            b Área de atuatuação:
+          td= applicant.area_of_expertise
+        tr
+          td.text-end
+            b Cargo:
+          td= applicant.professional_title
+        tr
+          td.text-end
+            b Telefone:
+          td
+            span.badge.text-bg-secondary=applicant.phone_number
+        tr
+          td.text-end
+            b Criado em: 
+          td
+            i.bi.bi-calendar-week.me-2.ms-2
+            =applicant.created_at?applicant.created_at.toLocaleDateString():''
+        tr
+          td.text-end
+            b Atualizado em: 
+          td
+            i.bi.bi-calendar-week.me-2.ms-2
+            =applicant.updated_at?applicant.updated_at.toLocaleDateString():''
+        tr
+          td.text-end
+            b Localização:
+          td=applicant.location
       
     .col-md-6
       h3 Curriculum

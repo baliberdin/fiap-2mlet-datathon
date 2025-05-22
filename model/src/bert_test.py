@@ -1,4 +1,4 @@
-from transformers import BertModel, BertTokenizer 
+from transformers import AutoModel, AutoTokenizer 
 import torch 
 import numpy as np 
 from sklearn.metrics.pairwise import cosine_similarity
@@ -6,35 +6,45 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 #model_name = 'bert-base-uncased' 
 model_name = 'neuralmind/bert-base-portuguese-cased'
-tokenizer = BertTokenizer.from_pretrained(model_name) 
-model = BertModel.from_pretrained(model_name) 
+tokenizer = AutoTokenizer.from_pretrained(model_name, max_length=512, padding=True, truncation=True) 
+print(tokenizer.__class__)
+model = AutoModel.from_pretrained(model_name) 
 
 def get_embedding(text): 
     """Gera o embedding do texto usando BERT."""
+    print("Embedding\n")
     # Tokenize e adicione [CLS] e [SEP] tokens 
-    tokens = tokenizer.tokenize(text) 
-    tokens = ['[CLS]'] + tokens + ['[SEP]'] 
+    #tokens = tokenizer.tokenize(text) 
+    inputs = tokenizer(text, return_tensors="pt") 
+    #tokens = ['[CLS]'] + tokens + ['[SEP]'] 
     # Converta para IDs 
-    input_ids = tokenizer.convert_tokens_to_ids(tokens) 
+    #input_ids = tokenizer.convert_tokens_to_ids(tokens) 
     # Crie tensores do PyTorch 
-    tensor_input_ids = torch.tensor([input_ids]) 
+    #tensor_input_ids = torch.tensor([input_ids]) 
+    
+    attention_mask = inputs["attention_mask"]
+    
     # Desative o cálculo de gradientes (não estamos treinando) 
     with torch.no_grad(): 
         # Obtenha a saída do modelo 
-        output = model(tensor_input_ids) 
+        #output = model(tensor_input_ids) 
+        output = model(**inputs)
         # Use o embedding da camada CLS como representação do texto 
-        embedding = output.last_hidden_state[:, 0, :] 
-        return embedding.numpy() 
+    embeddings = output.last_hidden_state[:, 0, :] 
+    return embeddings.numpy() 
+    
+    
 
 def find_best_matches(job_description, candidates): 
     """Encontra os candidatos que melhor se encaixam na vaga.""" 
     # Gere o embedding da descrição da vaga 
     job_embedding = get_embedding(job_description) 
-    #print(job_embedding.shape)
+    print(job_embedding.shape)
     # Crie embeddings para todos os candidatos 
     candidate_embeddings = [] 
-    for c in candidates:
-        candidate_embeddings.extend(get_embedding(c['resume']) ) 
+    #for c in candidates:
+    #    candidate_embeddings.extend(get_embedding(c['resume']) ) 
+    [candidate_embeddings.extend(get_embedding(c['resume'])) for c in candidates]
     
     print(np.array(candidate_embeddings).shape)
     # Calcule a similaridade de cosseno entre a vaga e cada candidato 
@@ -62,4 +72,11 @@ print("Melhores candidatos:")
     
 for m in best_matches: 
     print(m)
+    
+    
+#import faiss                   # make faiss available
+#index = faiss.IndexFlatL2(d)   # build the index
+#print(index.is_trained)
+#index.add(xb)                  # add vectors to the index
+#print(index.ntotal)
     

@@ -6,3 +6,7 @@ __pycache__
 .tool-versions
 build
 dist
+.vscode
+_*.ipynb
+model/scripts/checkpoints*
+model/scripts/trained_model*

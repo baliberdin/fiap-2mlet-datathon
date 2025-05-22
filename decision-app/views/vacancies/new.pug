@@ -1,0 +1,39 @@
+extends ../layout
+
+block content
+  .row.mt-4
+    .col
+        h1 Nova Vaga
+    .row
+        .col-md-4
+            form.form(action="/vacancies" method="POST")
+                .mb-3
+                    label.form-label Título da Vaga
+                    input.form-control(name="title")
+                .mb-3
+                    label.form-label Descrição / Principais Atividades
+                    textarea.form-control(name="main_activities")
+                .mb-3
+                    label.form-label Habilidades Comportamentais
+                    textarea.form-control(name="behavioral_skills")
+                .mb-3
+                    label.form-label Local de trabalho
+                    input.form-control(name="location" placeholder="São Paulo, São Paulo")
+                .mb-3
+                    label.form-label Nível de Senioridade
+                    select.form-select(name="professional_level")
+                        option() -
+                        option(value="Sênior") Sênior
+                        option(value="Pleno") Pleno
+                        option(value="Júnior") Júnior
+                        option(value="Assistente") Assistente
+                        option(value="Treinee") Trainee
+                        option(value="Estagiário") Estagiário
+                .mb-3.form-check
+                    input.form-check-input(name="only_pwd" type="checkbox")
+                    label.form-check-label PCD
+                .mb-3
+                    label.form-label Cliente
+                    input.form-control(name="client")
+                .mb-3
+                    button.btn.btn-primary(type="submit") Cadastrar

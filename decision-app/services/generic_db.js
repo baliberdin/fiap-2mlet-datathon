@@ -28,4 +28,24 @@ module.exports = class GenericDB {
             });
         });
     }
+
+    save = function(obj) {
+        return new Promise((resolve, reject) => {
+            let keys = Object.keys(obj);
+            let values = keys.map( k => obj[k]);
+            //console.log(keys);
+            //console.log(values);
+
+            let stmt = `INSERT INTO ${this.table} (${keys.join(", ")}) VALUES(${keys.map( k => "?").join(",")})`;
+
+            //console.log(stmt);
+            pool.query(stmt, values, (error, results) => {
+                if (error) {
+                    return reject(error);
+                }
+                console.log(results);
+                resolve(results.insertId);
+            });
+        });
+    }
 };
