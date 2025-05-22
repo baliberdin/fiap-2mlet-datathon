@@ -81,8 +81,9 @@ make run-mysql-client
 ```
 
 #### Ingestão e pré-processamento dos Datasets
+Os dados entregues pela FIAP devem estar na pasta **datasets** antes de rodarmos essa task.
 ```sh
-# Essa task roda um Notebook (data_engineering/preprocessing_data.ipynb)
+# Essa task roda o Notebook (data_engineering/preprocessing_data.ipynb)
 make restore-database
 ```
 Ao fim dessa task execute novamente o client mysql para verificar se os dados estão no banco decision.
