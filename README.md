@@ -18,7 +18,7 @@ Para rodar esse projeto localmente será necessário:
 - Make (Automações)
 - Python >= 3.13 
 - Docker
-- Java 17
+- Java 17 (para rodar o Spark nos notebooks)
 - Datasets disponibilizados pela FIAP
 
 Também será necessário realizar o build e instalar as libs do projeto com o make, vide o passo a passo de como subir o ambiente local.
@@ -43,7 +43,7 @@ ser executados em um shell (bash/sh) e que tenha o make instalado. Todas as tare
 
 ## Preparando o ambiente virtual
 ```sh
-# e instalar os requirements
+# Cria o virtual env e instala os requirements
 python -m venv .vemv
 pip install --upgrade pip
 pip install -r requirements.txt
