@@ -1,12 +1,20 @@
 from fastapi.testclient import TestClient
 from unittest.mock import patch
-from main import app
+from main import app, get_model_service
 from services.vectordb import get_similar_applicants
 from api.resources import SimilarityDocumentResponse, CollectionPointer, Document
 from fastapi.exceptions import HTTPException
 
+class MockModelService:
+    def get_embedding(self, doc):
+        pass
+    
+def get_mock_service():
+    return MockModelService()
 
+app.dependency_overrides[get_model_service] = get_mock_service
 client = TestClient(app)
+
 
 def test_should_return_available_endpoints_on_root():
     # When
@@ -96,7 +104,7 @@ def test_should_return_error_when_call_to_vectordb_fail(mock_vacancy_service, mo
     
     
 @patch("services.vectordb.post_document")
-@patch("main.model_service")
+@patch("main.get_model_service")
 def test_should_embedding_document(mock_vectordb_service, mock_model_service):
     # Given
     doc = {"id":1, "title":"Dev Java", "description":"Conhecimento em Spring Boot", "location":"São Paulo, São Paulo"}

@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from prometheus_fastapi_instrumentator import Instrumentator
 from prometheus_client import Gauge
 import os
@@ -18,7 +18,9 @@ config = get_config()
 # Inicia o framework FastAPI e adiciona o endpoint de métricas do Prometheus
 app = FastAPI(title="Stock Predictions API")
 instrumentator = Instrumentator().instrument(app).expose(app)
-model_service = ModelService(model_name=config.model.name, model_version=config.model.version, mlflow_tracking_uri=config.model.mlflow_tracking_uri)
+
+def get_model_service():
+    return ModelService(model_name=config.model.name, model_version=config.model.version, mlflow_tracking_uri=config.model.mlflow_tracking_uri)
 
 
 @app.get("/")
@@ -85,7 +87,7 @@ async def similar_vacancies(applicant_id:int, limit:int = 5):
 
 
 @app.post("/document/{collection_name}")
-async def index_document(doc:IndexDocument, collection_name:str):
+async def index_document(doc:IndexDocument, collection_name:str, model_service: ModelService = Depends(get_model_service)):
     """Recurso que recebe um documento para indexado no Qdrant.
     Primeiro o embeddings devem ser calculados usando o Modelo treinado
     
